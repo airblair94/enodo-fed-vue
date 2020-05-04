@@ -52,9 +52,11 @@ export default {
     parentFilterList: Object,
   },
   methods: {
+    // passes filters to PropertyMap
     submitFilters() {
       this.$emit('interface', this.filterList);
     },
+    // Adds filter every time a dropdown option is selected
     addFilter({ name, type, optionsList }) {
       if (type === 'VARCHAR(250)' || type === 'DATE') {
         this.filterList = {

@@ -1,5 +1,6 @@
 <template>
-  <div v-if="type === 'VARCHAR(250)' || type === 'DATE'">
+  <el-col :span="4" v-if="type === 'VARCHAR(250)' || type === 'DATE'">
+    {{filterName}}:
     <el-select v-model="value" :placeholder="filterName" v-on:change="sendToParent">
       <el-option
         v-for="option in optionsList"
@@ -8,12 +9,24 @@
         :value="option">
       </el-option>
     </el-select>
-  </div>
-  <div v-else>
+    <el-button type="danger" v-on:click="removeToParent">Remove Filter</el-button>
+  </el-col>
+  <el-col :span="4" v-else>
     {{filterName}}:
-    <el-input :placeholder="`Min ${filterName}`" v-model="min" v-on:input="sendToParent"></el-input>
-    <el-input :placeholder="`Max ${filterName}`" v-model="max" v-on:input="sendToParent"></el-input>
-  </div>
+    <el-input
+      size="medium"
+      :placeholder="`Min ${filterName}`"
+      v-model="min"
+      v-on:input="sendToParent">
+    </el-input>
+    <el-input
+      size="medium"
+      :placeholder="`Max ${filterName}`"
+      v-model="max"
+      v-on:input="sendToParent">
+    </el-input>
+    <el-button type="danger" v-on:click="removeToParent">Remove Filter</el-button>
+  </el-col>
 </template>
 
 <script>
@@ -34,6 +47,11 @@ export default {
     filterListFromParent: Object,
   },
   methods: {
+    removeToParent() {
+      delete this.filterList[this.filterName];
+      this.$emit('interface', { ...this.filterList });
+    },
+    // sends the new filter values to the FilterContainer
     sendToParent() {
       const updatedFilter = {
         name: this.filterName,

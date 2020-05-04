@@ -12,7 +12,6 @@
       <GmapMap
         :center="{lat:41.89, lng:-87.65}"
         :zoom="13"
-        map-type-id="terrain"
         style="width: 100vw; height: 95vh"
       >
         <PropertyMapMarker
@@ -44,8 +43,6 @@ export default {
       properties: [],
       filters: [],
       colorSpectrum: null,
-      min_est_MV: null,
-      max_est_MV: null,
       filterList: {},
     };
   },
@@ -62,11 +59,12 @@ export default {
         p.estimated_market_value
         : max, data[0].estimated_market_value);
     },
+    // returns all filters(ie. columns in db) and said filter's type wether it be categorical
+    // or numerical data. If it is categorical returns all possible options
     getFilters() {
       const path = 'http://localhost:5000/filters';
       axios.get(path)
         .then((res) => {
-          console.log(res.data);
           this.filters = res.data;
         })
         .catch((error) => {
@@ -74,40 +72,36 @@ export default {
           console.error(error);
         });
     },
+    // sets the color spectrum for the markers using rainbowvis.js
+    setSpectrum(data) {
+      const minEstMV = this.getMinEstMV(data);
+      const maxEstMV = this.getMaxEstMV(data);
+      // eslint-disable-next-line
+      const Rainbow = require('rainbowvis.js');
+      this.colorSpectrum = new Rainbow();
+      this.colorSpectrum.setSpectrum('red', 'green');
+      this.colorSpectrum.setNumberRange(minEstMV, maxEstMV);
+    },
+    // sends the filters that have been selected by the user and sets new data
     handleSubmittedFilters(event) {
       const path = 'http://localhost:5000/properties';
-      console.log(event);
       axios.post(path, event)
         .then((res) => {
-          console.log(res.data);
           this.properties = res.data;
-          this.min_est_MV = this.getMinEstMV(res.data);
-          this.max_est_MV = this.getMaxEstMV(res.data);
-          // eslint-disable-next-line
-          const Rainbow = require('rainbowvis.js');
-          this.colorSpectrum = new Rainbow();
-          this.colorSpectrum.setSpectrum('red', 'green');
-          this.colorSpectrum.setNumberRange(this.min_est_MV, this.max_est_MV);
+          this.setSpectrum(res.data);
         })
         .catch((err) => {
           // eslint-disable-next-line
           console.error(err);
         });
     },
+    // gets initial properties
     getProperties() {
       const path = 'http://localhost:5000/properties';
       axios.get(path)
         .then((res) => {
-          // eslint-disable-next-line
-          console.log(res.data);
           this.properties = res.data;
-          this.min_est_MV = this.getMinEstMV(res.data);
-          this.max_est_MV = this.getMaxEstMV(res.data);
-          // eslint-disable-next-line
-          const Rainbow = require('rainbowvis.js');
-          this.colorSpectrum = new Rainbow();
-          this.colorSpectrum.setSpectrum('red', 'green');
-          this.colorSpectrum.setNumberRange(this.min_est_MV, this.max_est_MV);
+          this.setSpectrum(res.data);
         })
         .catch((error) => {
           // eslint-disable-next-line
