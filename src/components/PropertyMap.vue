@@ -49,15 +49,17 @@ export default {
   methods: {
     getMinEstMV(data) {
       // eslint-disable-next-line
-      return data.reduce((min, p) => p.estimated_market_value < min ?
+      return data.length > 0 ? data.reduce((min, p) => p.estimated_market_value < min ?
         p.estimated_market_value
-        : min, data[0].estimated_market_value);
+        : min, data[0].estimated_market_value)
+        : 0;
     },
     getMaxEstMV(data) {
       // eslint-disable-next-line
-      return data.reduce((max, p) => p.estimated_market_value > max ?
+      return data.length > 0 ? data.reduce((max, p) => p.estimated_market_value > max ?
         p.estimated_market_value
-        : max, data[0].estimated_market_value);
+        : max, data[0].estimated_market_value)
+        : 1;
     },
     // returns all filters(ie. columns in db) and said filter's type wether it be categorical
     // or numerical data. If it is categorical returns all possible options

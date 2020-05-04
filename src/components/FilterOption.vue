@@ -14,12 +14,14 @@
   <el-col :span="4" v-else>
     {{filterName}}:
     <el-input
+      class="el-input"
       size="medium"
       :placeholder="`Min ${filterName}`"
       v-model="min"
       v-on:input="sendToParent">
     </el-input>
     <el-input
+      class="el-input"
       size="medium"
       :placeholder="`Max ${filterName}`"
       v-model="max"
@@ -48,10 +50,8 @@ export default {
   },
   methods: {
     removeToParent() {
-      const copy = { ...this.filterList };
-      // This causes a bug for some reason it removes all entries after the deleted object
-      delete copy[this.filterName];
-      this.$emit('interface', copy);
+      delete this.filterList[this.filterName];
+      this.$emit('interface', { ...this.filterList });
     },
     // sends the new filter values to the FilterContainer
     sendToParent() {
@@ -62,7 +62,13 @@ export default {
         min: this.min,
         value: this.value,
       };
-      this.$emit('interface', { ...this.filterList, [this.filterName]: { ...updatedFilter } });
+      this.filterList[this.filterName] = { ...updatedFilter };
+      this.$emit('interface', this.filterList);
+    },
+  },
+  watch: {
+    filterListFromParent(val) {
+      this.filterList = { ...val };
     },
   },
   beforeMount() {
@@ -70,3 +76,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.el-input {
+  padding-bottom: 5px;
+}
+</style>

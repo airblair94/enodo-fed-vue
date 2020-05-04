@@ -16,7 +16,7 @@
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <el-button type="success" v-on:click="submitFilters">
+        <el-button class="el-button" type="success" v-on:click="submitFilters">
           Submit Filters
         </el-button>
       </div>
@@ -95,5 +95,8 @@ export default {
     top: 0 !important;
     height: 500px;
     overflow-y: scroll;
+  }
+  .el-button {
+    margin: 5px;
   }
 </style>
