@@ -1,23 +1,25 @@
 <template>
   <div>
     <el-col :span="4">
-      <el-dropdown @command="addFilter">
-        <el-button type="primary">
-          Add Filter<i class="el-icon-arrow-down el-icon--right"></i>
+      <div>
+        <el-dropdown @command="addFilter" size="medium">
+          <el-button type="primary">
+            Add Filter<i class="el-icon-arrow-down el-icon--right"></i>
+          </el-button>
+          <el-dropdown-menu class="el-dropdown-menu" slot="dropdown">
+            <el-dropdown-item
+              v-for="col in filters"
+              :key="col.name"
+              :command="col"
+            >
+              {{col.name}}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <el-button type="success" v-on:click="submitFilters">
+          Submit Filters
         </el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item
-            v-for="col in filters"
-            :key="col.name"
-            :command="col"
-          >
-            {{col.name}}
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-      <el-button type="success" v-on:click="submitFilters">
-        Submit Filters
-      </el-button>
+      </div>
     </el-col>
     <el-col :span="20">
       <FilterOption
@@ -86,3 +88,12 @@ export default {
   },
 };
 </script>
+
+<style>
+  .el-dropdown-menu {
+    position: absolute;
+    top: 0 !important;
+    height: 500px;
+    overflow-y: scroll;
+  }
+</style>

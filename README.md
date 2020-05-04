@@ -27,6 +27,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - All data even dates are categorical
 - Estimated market value scale is redone after every filter.
 - User would want to submit all filters instead of grid trying to update on every keypress
+- It is ok to leave null as an option in categorical filters (normally I would talk with product/design as to how these are best represented)
 
 ## Questions
 
@@ -37,3 +38,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ## Future States
 - Add toast functionality whenever filters are updated or submitted
 - Click window to show properties of each property
+
+## Known Bugs
+- If you remove a filter all filters chosen after it get removed.

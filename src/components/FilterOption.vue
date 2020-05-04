@@ -48,8 +48,10 @@ export default {
   },
   methods: {
     removeToParent() {
-      delete this.filterList[this.filterName];
-      this.$emit('interface', { ...this.filterList });
+      const copy = { ...this.filterList };
+      // This causes a bug for some reason it removes all entries after the deleted object
+      delete copy[this.filterName];
+      this.$emit('interface', copy);
     },
     // sends the new filter values to the FilterContainer
     sendToParent() {
